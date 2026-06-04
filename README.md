@@ -3,7 +3,7 @@
 **Contribution Number:** 1  
 **Student:** Quang Pham  
 **Issue:** https://github.com/marketcalls/openalgo/issues/1009  
-**Status:** Phase I Complete  
+**Status:** Phase II Complete  
 
 ---
 
@@ -66,3 +66,31 @@ Focusing the TOTP field on the Reset Password page brings up the standard full k
 
 - **Commit showing regression:**: https://github.com/boothedev/openalgo/commit/7ce35812c2a43d35f85af78e650c895680e6431b
 - **My findings:** Of the three files named in the issue, two (`Login.tsx` and `TwoFactorEnforcement.tsx`) already carried `inputMode="numeric"` and a numeric `pattern`. Only `ResetPassword.tsx` was missing the `inputMode` hint, so it was the single file requiring a change.
+
+---
+
+## Solution Approach
+
+### Analysis
+
+The root cause is a missing `inputMode="numeric"` attribute on the TOTP input. Without it, browsers fall back to the default text keyboard on mobile. The issue is purely a client-side input-attribute fix; no logic change is required because the `onChange` handler already filters to digits.
+
+### Proposed Solution
+
+Add the standard mobile numeric-keyboard hints to the `#totp` input on `ResetPassword.tsx`:
+
+- Add `inputMode="numeric"` (numeric keypad on Android and modern browsers).
+- Change `pattern="[0-9]{6}"` to `pattern="[0-9]*"` (the iOS numeric-keyboard trigger, as specified in the issue).
+- Keep `type="text"` to avoid `type="number"` spinner arrows.
+- Leave the existing `onChange` digit filter (`.replace(/\D/g, '').slice(0, 6)`) and `maxLength={6}` unchanged.
+
+### Implementation Plan
+
+**Understand:** TOTP inputs need an `inputMode`/`pattern` hint so mobile devices show a numeric keypad, without introducing number spinners.
+
+**Match:** `Login.tsx` and `TwoFactorEnforcement.tsx` already implement exactly this pattern (`inputMode="numeric"` + numeric `pattern` + `type="text"`), providing an in-codebase reference to match.
+
+**Plan:**
+1. Edit the `#totp` `<Input>` in `frontend/src/pages/ResetPassword.tsx`.
+2. Add `inputMode="numeric"` and change `pattern="[0-9]{6}"` → `pattern="[0-9]*"`.
+3. Verify via a frontend build, lint, and DevTools mobile emulation.
