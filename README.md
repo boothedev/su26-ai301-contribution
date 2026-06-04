@@ -23,14 +23,6 @@ The repo itself also caught my attention. OpenAlgo is a self-hosted algorithmic 
 
 The TOTP/OTP input fields in the React frontend use `type="text"` without an `inputMode` hint. Because the browser has no signal that the field is numeric-only, mobile devices render the full alphanumeric keyboard instead of a numeric keypad, making it harder for users to enter their 6-digit authentication codes.
 
-### Expected Behavior
-
-When a user focuses a TOTP/OTP field on a mobile device, the device should present a numeric keypad. The field should still avoid the up/down spinner arrows that `type="number"` introduces.
-
-### Current Behavior
-
-Focusing the TOTP field on the Reset Password page brings up the standard full keyboard, requiring the user to switch to the numeric layout manually before entering the code.
-
 ### Affected Components
 
 React frontend (`frontend/src/`), specifically the authentication/TOTP input fields:
@@ -46,3 +38,31 @@ The shared `Input` component (`frontend/src/components/ui/input.tsx`) spreads `{
 - [ ] Numeric keyboard appears on mobile for TOTP inputs
 - [ ] No spinner arrows (use type="text", not type="number")
 - [ ] Works on both iOS and Android
+
+---
+
+## Reproduction Process
+
+### Environment Setup
+
+- Backend runs via `uv run app.py` (Python 3.12+, `uv` package manager).
+- Frontend dependencies installed with `npm install` in `frontend/`. The repo keeps `frontend/dist/` out of feature branches (gitignored locally; CI force-commits the build on `main`), so a local build with Node was needed to typecheck the change.
+
+### Steps to Reproduce
+
+1. Open the React frontend and navigate to the Reset Password flow's TOTP step.
+2. Using browser DevTools mobile emulation (device toolbar), focus the "TOTP Code" input.
+3. Observed result: the input was declared `type="text"` with no `inputMode`, so the device does not request a numeric keypad.
+
+### Expected Behavior
+
+When a user focuses a TOTP/OTP field on a mobile device, the device should present a numeric keypad. The field should still avoid the up/down spinner arrows that `type="number"` introduces.
+
+### Current Behavior
+
+Focusing the TOTP field on the Reset Password page brings up the standard full keyboard, requiring the user to switch to the numeric layout manually before entering the code.
+
+### Reproduction Evidence
+
+- **Commit showing regression:**: https://github.com/boothedev/openalgo/commit/7ce35812c2a43d35f85af78e650c895680e6431b
+- **My findings:** Of the three files named in the issue, two (`Login.tsx` and `TwoFactorEnforcement.tsx`) already carried `inputMode="numeric"` and a numeric `pattern`. Only `ResetPassword.tsx` was missing the `inputMode` hint, so it was the single file requiring a change.
