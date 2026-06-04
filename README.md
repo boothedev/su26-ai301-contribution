@@ -3,7 +3,7 @@
 **Contribution Number:** 1  
 **Student:** Quang Pham  
 **Issue:** https://github.com/marketcalls/openalgo/issues/1009  
-**Status:** Phase III In Progress  
+**Status:** Phase III Complete  
 
 ---
 
@@ -118,3 +118,32 @@ Add the standard mobile numeric-keyboard hints to the `#totp` input on `ResetPas
 - [x] Numeric keyboard appears on mobile for TOTP inputs.
 - [x] No spinner arrows (uses `type="text"`, not `type="number"`).
 - [x] Works on both iOS (`pattern="[0-9]*"`) and Android (`inputMode="numeric"`).
+
+---
+
+## Implementation Notes
+
+### Code Changes
+
+- **Files modified:** `frontend/src/pages/ResetPassword.tsx`
+- **Key commit:** `6ff9bac3` (branch `fix/totp-numeric-keyboard`)
+- **Diff:**
+
+```diff
+   <Input
+     id="totp"
+     type="text"
++    inputMode="numeric"
+     value={totpCode}
+     onChange={(e) => setTotpCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+     placeholder="000000"
+-    pattern="[0-9]{6}"
++    pattern="[0-9]*"
+     maxLength={6}
+     className="text-center text-2xl tracking-widest"
+     required
+     autoFocus
+   />
+```
+
+- **Approach decisions:** Scoped the change to `ResetPassword.tsx` only, since `Login.tsx` and `TwoFactorEnforcement.tsx` already had the fix. Other OTP inputs (`BrokerTOTP.tsx` broker configs, `SamcoAuth.tsx`) also lack one or both attributes but are outside this issue's scope and left as follow-ups. Used the issue-specified `pattern="[0-9]*"`.
