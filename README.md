@@ -3,7 +3,7 @@
 **Contribution Number:** 1  
 **Student:** Quang Pham  
 **Issue:** https://github.com/marketcalls/openalgo/issues/1009  
-**Status:** Phase II Complete  
+**Status:** Phase III In Progress  
 
 ---
 
@@ -94,3 +94,27 @@ Add the standard mobile numeric-keyboard hints to the `#totp` input on `ResetPas
 1. Edit the `#totp` `<Input>` in `frontend/src/pages/ResetPassword.tsx`.
 2. Add `inputMode="numeric"` and change `pattern="[0-9]{6}"` → `pattern="[0-9]*"`.
 3. Verify via a frontend build, lint, and DevTools mobile emulation.
+
+**Implement:**
+- Branch: [fix/totp-numeric-keyboard](https://github.com/boothedev/openalgo/tree/fix/totp-numeric-keyboard)
+- Commit: [6ff9bac3](https://github.com/marketcalls/openalgo/commit/6ff9bac37e419ad54f4fa1453ad30870b34d3456) — `fix(frontend): show numeric keypad for TOTP input on ResetPassword`
+
+**Review:** Single-file, three-line change; follows Conventional Commits (`fix:` scope); matches existing TOTP-input pattern in the codebase; no behavior change beyond the keyboard hint.
+
+**Evaluate:** Frontend build + lint pass and the rendered input carries the expected attributes (see Testing).
+
+---
+
+## Testing Strategy
+
+### Manual Testing
+
+- `npm run build` (tsc + vite) — passes, no TypeScript errors.
+- `biome lint src/pages/ResetPassword.tsx` — clean.
+- DevTools mobile emulation: the rendered `<input>` carries `inputmode="numeric"` and `pattern="[0-9]*"` with `type="text"` (no spinner arrows); non-digit characters are still ignored by the existing `onChange` filter.
+
+### Acceptance Criteria
+
+- [x] Numeric keyboard appears on mobile for TOTP inputs.
+- [x] No spinner arrows (uses `type="text"`, not `type="number"`).
+- [x] Works on both iOS (`pattern="[0-9]*"`) and Android (`inputMode="numeric"`).
