@@ -40,3 +40,9 @@ React frontend (`frontend/src/`), specifically the authentication/TOTP input fie
 - `frontend/src/components/auth/TwoFactorEnforcement.tsx` - the TOTP setup/verification input used from the Profile flow - already had `inputMode="numeric"` and `pattern`.
 
 The shared `Input` component (`frontend/src/components/ui/input.tsx`) spreads `{...props}` onto the native `<input>`, so `inputMode` and `pattern` pass through without any component change.
+
+### Acceptance Criteria
+
+- [ ] Numeric keyboard appears on mobile for TOTP inputs
+- [ ] No spinner arrows (use type="text", not type="number")
+- [ ] Works on both iOS and Android
