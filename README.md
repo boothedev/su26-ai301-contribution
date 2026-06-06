@@ -93,6 +93,7 @@ Add the standard mobile numeric-keyboard hints to the `#totp` input on `ResetPas
 **Implement:**
 - Branch: `fix/totp-numeric-keyboard`
 - Commit: `6ff9bac3` — `fix(frontend): show numeric keypad for TOTP input on ResetPassword`
+- Link: https://github.com/boothedev/openalgo/tree/fix/totp-numeric-keyboard
 
 **Review:** Single-file, three-line change; follows Conventional Commits (`fix:` scope); matches existing TOTP-input pattern in the codebase; no behavior change beyond the keyboard hint.
 
@@ -126,7 +127,7 @@ Not applicable. The attribute change does not affect form submission, validation
 
 ## Implementation Notes
 
-### Implementation Progress
+### Week 1 Progress
 
 - Explored the three files named in the issue plus the shared `Input` component, and searched the frontend for any other OTP/TOTP inputs. Found that `Login.tsx` and `TwoFactorEnforcement.tsx` were already fixed, which narrowed the work to `ResetPassword.tsx`.
 - Applied the attribute change, installed frontend deps (`npm install`), then ran `npm run build` (tsc + vite) and `biome lint` to verify, and confirmed the rendered attributes via DevTools.
@@ -181,7 +182,7 @@ Not applicable. The attribute change does not affect form submission, validation
 >
 > **To do:** No further action needed.
 
-**Status:** Merged (2026-06-04)
+**Status:** Merged
 
 ---
 
