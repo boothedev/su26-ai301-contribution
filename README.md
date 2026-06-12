@@ -1,4 +1,4 @@
-# Contribution 1: Add inputMode='numeric' for TOTP and OTP input fields
+# Contribution 1: Add `inputMode='numeric'` for TOTP and OTP input fields
 
 **Contribution Number:** 1  
 **Student:** Quang Pham  
